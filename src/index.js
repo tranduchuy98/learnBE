@@ -6,6 +6,8 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import router from './router/index.js'
 import BaseResponse from "./model/base_respone.js";
+import {getRole} from "./database/role_db.js";
+import {getUsers} from "./database/user_db.js";
 
 const app = express();
 
@@ -28,6 +30,10 @@ mongoose.connect(DB_URL);
 mongoose.connection.on('error', (error) => console.log(error))
 mongoose.connection.on('connected', () => {
     console.log('connected DB success')
+
 });
+
+const user = await getRole()
+console.log(user);
 
 app.use('/', router());

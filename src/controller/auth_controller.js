@@ -4,6 +4,7 @@ import md5 from 'crypto-js/md5.js';
 import ErrorResponse from '../model/error_response.js';
 import SuccessResponse from '../model/success_response.js';
 import { generateToken, generateRefreshToken } from '../helper/jwt_helper.js';
+import { selector } from "recoil";
 
 export const registerUser = async (req, res) => {
     try {
