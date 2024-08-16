@@ -24,7 +24,7 @@ export const registerUser = async (req, res) => {
         }
 
         if (password.length < 6) {
-          return res.status(400).send(new ErrorResponse(400, 'Password phải lớn hơn 5 ký tự'));
+          return res.status(400).send(new ErrorResponse(400, 'Password phải lớn hơn 5'));
         }
 
         const exitsUser = await getUserByEmail(email);

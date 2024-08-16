@@ -4,5 +4,5 @@ import { registerUser, login, refreshToken } from '../controller/auth_controller
 export default (router) => {
     router.post('/auth/register', registerUser)
     router.post('/auth/login', login)
-    router.get('/refreshToken', refreshToken)
+    router.post('/auth/refreshToken', refreshToken)
 }

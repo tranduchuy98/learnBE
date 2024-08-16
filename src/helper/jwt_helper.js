@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import 'dotenv/config.js';
 
 const expireAccessTokenTime = '5h';
-const expireRefreshTokenTime = '7d';
+const expireRefreshTokenTime = '5s';
 const accessTokenSecret = "ABC@1234";
 const refreshTokenSecret = "DEF@1234";
 
