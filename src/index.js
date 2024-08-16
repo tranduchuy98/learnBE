@@ -5,9 +5,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import router from './router/index.js'
-import BaseResponse from "./model/base_respone.js";
 import {getRole} from "./database/role_db.js";
-import {getUsers} from "./database/user_db.js";
 
 const app = express();
 
@@ -33,7 +31,7 @@ mongoose.connection.on('connected', () => {
 
 });
 
-const user = await getRole()
-console.log(user);
+// const user = await getRole()
+// console.log(user);
 
 app.use('/', router());

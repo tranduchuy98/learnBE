@@ -4,13 +4,27 @@ import md5 from 'crypto-js/md5.js';
 import ErrorResponse from '../model/error_response.js';
 import SuccessResponse from '../model/success_response.js';
 import { generateToken, generateRefreshToken } from '../helper/jwt_helper.js';
-import { selector } from "recoil";
+import { verifyRefreshToken, verifyToken } from '../helper/jwt_helper.js';
+
+function validateEmail(email) {
+  var re = /\S+@\S+\.\S+/;
+  return re.test(email);
+}
 
 export const registerUser = async (req, res) => {
     try {
         const { email, password, name } = req.body;
+
         if (!email || !password || !name) {
             return res.status(400).send(new ErrorResponse(400, 'Nhập đầy đủ thông tin'));
+        }
+
+        if (!validateEmail(email)) {
+          return res.status(400).send(new ErrorResponse(400, 'Email sai định dạng'));
+        }
+
+        if (password.length < 6) {
+          return res.status(400).send(new ErrorResponse(400, 'Password phải lớn hơn 5 ký tự'));
         }
 
         const exitsUser = await getUserByEmail(email);
@@ -66,4 +80,35 @@ export const login = async(req, res) => {
         console.log(e);
         return res.sendStatus(500);
     }
+}
+
+export const refreshToken = async(req, res) => {
+  try {
+    const {refreshToken} = req.body;
+    if(!refreshToken) {
+      return res.status(401).send(new ErrorResponse(401,'Invalid refreshToken'));
+    }
+    const refreshTokenData = verifyRefreshToken(refreshToken);
+
+    const payload = {
+      id: refreshTokenData.id,
+      email: refreshTokenData.email,
+    };
+
+    const accessToken = generateToken(payload);
+    const refreshTokenNew = generateRefreshToken(payload);
+
+    const resUser = {
+      id: refreshTokenData.id,
+      email: refreshTokenData.email,
+      accessToken,
+      refreshToken: refreshTokenNew,
+    }
+    return res.status(200).send(new SuccessResponse('Refresh Token success', resUser));
+  } catch (e) {
+      if (e.message == "jwt expired") {
+        return res.status(401).send(new ErrorResponse(401,'RefreshToken expired'));
+    }
+      return res.status(401).send(new ErrorResponse(401,'Invalid refreshToken'));
+  }
 }

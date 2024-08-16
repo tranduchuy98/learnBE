@@ -6,7 +6,7 @@ const UserSchema = mongoose.Schema({
     email: {type: String, require: true},
 })
 
-export const UserModel = mongoose.model('User', UserSchema);
+export const UserModel = mongoose.model('users', UserSchema);
 
 export const getUsers = () => UserModel.find();
 export const getUserById = (id) => UserModel.findById(id);
