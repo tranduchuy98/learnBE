@@ -33,9 +33,7 @@ export const validUserId = async(req, res, next) => {
       if (!user) {
           return res.status(400).send(new ErrorResponse(400, 'User ID không tồn tại'));
       }
-      if (user.id != req.user.id) {
-        return res.status(400).send(new ErrorResponse(400, 'User ID không chính xác'));
-      }
+      req.userGet = user
       return next()
     } catch(e){
      return res.status(400).send(new ErrorResponse(400, 'User ID không tồn tại'));

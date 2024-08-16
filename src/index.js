@@ -5,7 +5,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import router from './router/index.js'
-import {getRole} from "./database/role_db.js";
+import {initData} from './controller/init_controller.js'
 
 const app = express();
 
@@ -28,10 +28,8 @@ mongoose.connect(DB_URL);
 mongoose.connection.on('error', (error) => console.log(error))
 mongoose.connection.on('connected', () => {
     console.log('connected DB success')
-
 });
 
-// const user = await getRole()
-// console.log(user);
+initData();
 
 app.use('/', router());

@@ -2,20 +2,39 @@ import SuccessResponse from '../model/success_response.js';
 import ErrorResponse from '../model/error_response.js';
 import { updateUserById, deleteUserById, getUserById } from '../database/user_db.js';
 import md5 from 'crypto-js/md5.js';
+import {StateValue} from "../State/state_value.js"
 
+
+// var UpdateId = stateValue.UserRoles.find(item => item.role === 'UPDATE').id 
+// var NormalId = stateValue.UserRoles.find(item => item.role === 'NORMAL').id 
 
 export const getUserInfo = async (req, res) => {
   try {
     const user = req.user;
-    const resUser = {
-        id: user.id,
-        email: user.email,
-        name: user.name,
+    const userGet = req.userGet;
+    var stateValue = new StateValue()
+    var AdminId = stateValue.UserRoles.find(item => item.role === 'ADMIN').id 
+
+    if (user.role.includes(AdminId)) {
+      return res.status(200).send(new SuccessResponse('Success', userGet)).end();
     }
+
+    if (userGet.id != user.id) {
+      const resUser = {
+        name: userGet.name,
+        id: userGet.id,
+    }
+    return res.status(200).send(new SuccessResponse('Success', resUser)).end();
+    }
+    const resUser = {
+      id: userGet.id,
+      email: userGet.email,
+      name: userGet.name,
+  }
     return res.status(200).send(new SuccessResponse('Success', resUser)).end();
   } catch(e){
     console.log(e)
-    return res.status(400).send(new ErrorResponse(400, 'id không tồn tại'));
+    return res.status(400).send(new ErrorResponse(400, 'Lỗi'));
   }
 }
 
