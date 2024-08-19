@@ -5,9 +5,6 @@ import md5 from 'crypto-js/md5.js';
 import {StateValue} from "../State/state_value.js"
 
 
-// var UpdateId = stateValue.UserRoles.find(item => item.role === 'UPDATE').id 
-// var DeleteId = stateValue.UserRoles.find(item => item.role === 'DELETE').id 
-
 export const getUserInfo = async (req, res) => {
   try {
     const user = req.user;
@@ -112,8 +109,6 @@ export const updatePassWord = async (req, res) => {
 
     const userMine = req.user;
     const user = req.userGet;
-
-
 
     var stateValue = new StateValue()
     var AdminId = stateValue.UserRoles.find(item => item.role === 'ADMIN').id 
