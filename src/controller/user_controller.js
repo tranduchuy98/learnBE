@@ -3,7 +3,7 @@ import ErrorResponse from '../model/error_response.js';
 import { updateUserById, deleteUserById, getUserById } from '../database/user_db.js';
 import md5 from 'crypto-js/md5.js';
 import {StateValue} from "../State/state_value.js"
-
+import { saveFile } from '../database/file_db.js';
 
 export const getUserInfo = async (req, res) => {
   try {
@@ -164,3 +164,23 @@ export const updatePassWord = async (req, res) => {
     return res.status(400).send(new ErrorResponse(400, 'Lỗi'));
   }
 }
+
+
+export const upLoadImage = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).send(new ErrorResponse(400, 'Thiếu file'));
+    } 
+
+    const filePayload = {
+      url: req.file.path,
+      name: req.file.originalname,
+      type: req.file.mimetype,
+  }
+    const userPayload = await saveFile(filePayload);
+    return res.status(200).send(new SuccessResponse('Update pass Success', filePayload)).end();
+  } catch(e){
+    console.log(e)
+    return res.status(400).send(new ErrorResponse(400, 'Lỗi'));
+  }
+}   

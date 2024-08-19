@@ -11,7 +11,6 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const app = express();
-app.use(express.urlencoded({ extended: true }));
 
 app.use(cors({
     credentials:true
@@ -19,7 +18,7 @@ app.use(cors({
 
 app.use(cookieParser());
 app.use(bodyParser.json());
-
+app.use(express.urlencoded({ extended: true }));
 
 
 const server = http.createServer(app);
