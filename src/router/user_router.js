@@ -8,5 +8,5 @@ export default (router) => {
     router.post('/user/updateUserName', isAuthentication, validUserId, updateUserName)
     router.post('/user/updatePassWord', isAuthentication, validUserId, updatePassWord)
     router.delete('/user/deleteUser', isAuthentication, validUserId, deleteUser)
-    router.put('/user/uploadImage', isAuthentication,upLoadFile.single("image"), upLoadImage)
+    router.put('/user/uploadImage', isAuthentication, upLoadFile.single("image"), upLoadImage)
 }

@@ -5,7 +5,7 @@ import ErrorResponse from '../model/error_response.js';
 import SuccessResponse from '../model/success_response.js';
 import { generateToken, generateRefreshToken } from '../helper/jwt_helper.js';
 import { verifyRefreshToken, verifyToken } from '../helper/jwt_helper.js';
-import {StateValue} from "../State/state_value.js"
+import {getRoles} from "../State/state_value.js"
 
 function validateEmail(email) {
   var re = /\S+@\S+\.\S+/;
@@ -33,13 +33,11 @@ export const registerUser = async (req, res) => {
             return res.status(400).send(new ErrorResponse(400,'Email đã được đăng ký'));
         }
 
-        var state = new StateValue()
-
         const user = await createUser({
             name,
             email,
             password: md5(password),
-            role: Array(state.UserRoles.find(item => item.role === 'NORMAL').id)
+            role: Array(getRoles().find(item => item.role === 'NORMAL').id)
         })
 
         return res.status(200).send(new SuccessResponse('Đăng ký thành công', null)).end();

@@ -5,9 +5,10 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import router from './router/index.js';
-import {initData} from './controller/init_controller.js';
+import {initData} from './State/state_value.js';
 
 import dotenv from "dotenv";
+
 dotenv.config();
 
 const app = express();

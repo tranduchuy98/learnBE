@@ -2,15 +2,14 @@ import SuccessResponse from '../model/success_response.js';
 import ErrorResponse from '../model/error_response.js';
 import { updateUserById, deleteUserById, getUserById } from '../database/user_db.js';
 import md5 from 'crypto-js/md5.js';
-import {StateValue} from "../State/state_value.js"
 import { saveFile } from '../database/file_db.js';
+import { getRoles } from '../State/state_value.js';
 
 export const getUserInfo = async (req, res) => {
   try {
     const user = req.user;
     const userGet = req.userGet;
-    var stateValue = new StateValue()
-    var AdminId = stateValue.UserRoles.find(item => item.role === 'ADMIN').id 
+    var AdminId = getRoles().find(item => item.role === 'ADMIN').id 
 
     if (user.role.includes(AdminId)) {
       return res.status(200).send(new SuccessResponse('Success', userGet)).end();
@@ -48,9 +47,8 @@ export const updateUserName = async (req, res) => {
       return res.status(400).send(new ErrorResponse(400, 'Giống name cũ'));
     }
 
-    var stateValue = new StateValue()
-    var AdminId = stateValue.UserRoles.find(item => item.role === 'ADMIN').id 
-    var UpdateId = stateValue.UserRoles.find(item => item.role === 'UPDATE').id 
+    var AdminId = getRoles().find(item => item.role === 'ADMIN').id 
+    var UpdateId = getRoles().find(item => item.role === 'UPDATE').id 
     
     if (userMine.role.includes(AdminId) || userMine.role.includes(UpdateId) || userMine.id == user.id) {
       var userUpdate = user
@@ -80,9 +78,8 @@ export const deleteUser = async (req, res) => {
     const userMine = req.user;
     const user = req.userGet;
 
-    var stateValue = new StateValue()
-    var AdminId = stateValue.UserRoles.find(item => item.role === 'ADMIN').id 
-    var DeleteId = stateValue.UserRoles.find(item => item.role === 'DELETE').id 
+    var AdminId = getRoles().find(item => item.role === 'ADMIN').id 
+    var DeleteId = getRoles().find(item => item.role === 'DELETE').id 
 
     if (userMine.role.includes(AdminId) || userMine.role.includes(DeleteId)) {  
       const userPayload = await deleteUserById(user.id);
@@ -110,9 +107,8 @@ export const updatePassWord = async (req, res) => {
     const userMine = req.user;
     const user = req.userGet;
 
-    var stateValue = new StateValue()
-    var AdminId = stateValue.UserRoles.find(item => item.role === 'ADMIN').id 
-    var UpdateId = stateValue.UserRoles.find(item => item.role === 'UPDATE').id 
+    var AdminId = getRoles().find(item => item.role === 'ADMIN').id 
+    var UpdateId = getRoles().find(item => item.role === 'UPDATE').id 
 
     if (userMine.role.includes(AdminId) || userMine.role.includes(UpdateId)) { 
 
@@ -171,14 +167,13 @@ export const upLoadImage = async (req, res) => {
     if (!req.file) {
       return res.status(400).send(new ErrorResponse(400, 'Thiếu file'));
     } 
-
     const filePayload = {
       url: req.file.path,
       name: req.file.originalname,
       type: req.file.mimetype,
   }
     const userPayload = await saveFile(filePayload);
-    return res.status(200).send(new SuccessResponse('Update pass Success', filePayload)).end();
+    return res.status(200).send(new SuccessResponse('Update Image Success', filePayload)).end();
   } catch(e){
     console.log(e)
     return res.status(400).send(new ErrorResponse(400, 'Lỗi'));
