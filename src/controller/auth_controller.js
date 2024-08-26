@@ -7,9 +7,47 @@ import { generateToken, generateRefreshToken } from '../helper/jwt_helper.js';
 import { verifyRefreshToken, verifyToken } from '../helper/jwt_helper.js';
 import {getRoles} from "../State/state_value.js"
 
+import { saveFile } from '../database/form_db.js';
+
 function validateEmail(email) {
   var re = /\S+@\S+\.\S+/;
   return re.test(email);
+}
+
+export const submitForm = async (req, res) => {
+  try {
+      const body = req.body;
+
+      // if (!email || !password || !name) {
+      //     return res.status(400).send(new ErrorResponse(400, 'Nhập đầy đủ thông tin'));
+      // }
+
+      // if (!validateEmail(email)) {
+      //   return res.status(400).send(new ErrorResponse(400, 'Email sai định dạng'));
+      // }
+
+      // if (password.length < 6) {
+      //   return res.status(400).send(new ErrorResponse(400, 'Password phải lớn hơn 5'));
+      // }
+
+      // const exitsUser = await getUserByEmail(email);
+      // if (exitsUser) {
+      //     return res.status(400).send(new ErrorResponse(400,'Email đã được đăng ký'));
+      // }
+
+      // const user = await createUser({
+      //     name,
+      //     email,
+      //     password: md5(password),
+      //     role: Array(getRoles().find(item => item.role === 'NORMAL').id)
+      // })
+
+      const filePayload = await saveFile(body);
+      return res.status(200).send(new SuccessResponse('FeedBack success', filePayload)).end();
+  } catch (e) {
+      console.log(e);
+      res.sendStatus(500);
+  }
 }
 
 export const registerUser = async (req, res) => {

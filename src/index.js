@@ -8,7 +8,6 @@ import router from './router/index.js';
 import {initData} from './State/state_value.js';
 
 import dotenv from "dotenv";
-
 dotenv.config();
 
 const app = express();
@@ -33,8 +32,9 @@ mongoose.connect(process.env.DB_URL);
 mongoose.connection.on('error', (error) => console.log(error))
 mongoose.connection.on('connected', () => {
     console.log('connected DB success')
+    initData();
 });
 
-initData();
+
 
 app.use('/', router());

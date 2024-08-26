@@ -27,6 +27,7 @@ export const isAuthentication = async (req, res, next) => {
     }
 }
 
+
 export const validUserId = async(req, res, next) => {
     try {
       const user = await getUserById(req.body.id);
