@@ -13,3 +13,5 @@ const fileSchema = mongoose.Schema({
 export const FileModel = mongoose.model('feedbacks', fileSchema);
 
 export const saveFile = (file) => new FileModel(file).save()
+
+export const getForm = () => FileModel.find();
